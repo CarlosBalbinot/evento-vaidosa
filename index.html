@@ -377,6 +377,24 @@
   .perf-hole.left { margin-right: -9px; margin-left: -18px; }
   .perf-hole.right { margin-left: -9px; margin-right: -18px; }
 
+  /* Scissors badge centered over the dashed line, "cutting" it — sits on
+     top via position:absolute so it doesn't interfere with the perf-hole
+     flex layout. */
+  .scissors-badge {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background: var(--cream);
+    border-radius: 50%;
+    color: var(--sage-dark);
+  }
+
   .pix-section {
     padding: 1.75rem 1.75rem 0;
   }
@@ -515,18 +533,15 @@
     gap: 0.75rem;
   }
 
-  .wordmark-brand {
-    font-family: "Cormorant Garamond", serif;
-    font-style: italic;
+  /* Both wordmarks share this one class — same font, weight, size and
+     tracking — so the two brand names read as one balanced pairing
+     instead of two differently-sized logo images. */
+  .wordmark {
+    font-family: "Jost", sans-serif;
     font-weight: 500;
-    font-size: 1.6rem;
+    font-size: 1rem;
+    letter-spacing: 0.04em;
     color: var(--cream);
-  }
-
-  .logo {
-    max-height: 44px;
-    width: auto;
-    display: block;
   }
 
   .wordmark-amp {
@@ -535,15 +550,6 @@
     font-size: 1.2rem;
     /* lighter tint than --blush so it clears 4.5:1 on --sage-dark */
     color: var(--blush-light);
-  }
-
-  .wordmark-talya {
-    font-family: "Jost", sans-serif;
-    font-weight: 400;
-    font-size: 0.8rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: rgba(251, 248, 240, 0.95);
   }
 
   footer .fine-print {
@@ -589,10 +595,6 @@
 
     .wordmarks {
       gap: 1.1rem;
-    }
-
-    .logo {
-      max-height: 56px;
     }
 
     footer .fine-print {
@@ -667,6 +669,15 @@
       <div class="perforation" aria-hidden="true">
         <span class="perf-hole left"></span>
         <span class="perf-hole right"></span>
+        <span class="scissors-badge">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="6" cy="6" r="3"></circle>
+            <circle cx="6" cy="18" r="3"></circle>
+            <line x1="20" y1="4" x2="8.12" y2="15.88"></line>
+            <line x1="14.47" y1="14.48" x2="20" y2="20"></line>
+            <line x1="8.12" y1="8.12" x2="12" y2="12"></line>
+          </svg>
+        </span>
       </div>
 
       <div class="pix-section">
@@ -681,10 +692,9 @@
         </div>
 
         <p class="pix-note">
-          Copie a chave, abra o Pix no seu banco e envie o pagamento. Depois
-          manda o comprovante pelo WhatsApp
+          Copie a chave e, após o pagamento, envie o comprovante pro WhatsApp
           <a href="https://wa.me/5554984462806" target="_blank" rel="noopener">(54) 98446-2806</a>
-          pra confirmar sua presença.
+          pra garantir sua vaga.
         </p>
       </div>
 
@@ -695,29 +705,12 @@
 
   <footer>
     <div class="wordmarks">
-      <!--
-        Coloque aqui os arquivos logo-vaidosa.png e logo-talya.png dentro da
-        pasta assets/ (fundo transparente, PNG ou SVG, altura mínima de
-        200px pra ficar nítido em qualquer tela).
-      -->
-      <img src="assets/logo-vaidosa.png" alt="Vaidosa Fitness" class="logo logo-vaidosa" onerror="handleLogoFallback(this, 'wordmark-brand', 'vaidosa fitness')">
+      <span class="wordmark">Vaidosa Fitness</span>
       <span class="wordmark-amp">&amp;</span>
-      <img src="assets/logo-talya.png" alt="Talya Portaluppi — Pilates &amp; Bem-Estar" class="logo logo-talya" onerror="handleLogoFallback(this, 'wordmark-talya', 'Talya Portaluppi — Pilates &amp; Bem-Estar')">
+      <span class="wordmark">Talya Portaluppi Pilates</span>
     </div>
     <p class="fine-print">Vagas limitadas · Ao ar livre · Leve seu tapete e sua energia</p>
   </footer>
-
-  <script>
-    // ---------- Fallback dos logos do rodapé ----------
-    // Se assets/logo-vaidosa.png ou assets/logo-talya.png não carregar,
-    // troca a tag <img> pelo texto do wordmark correspondente.
-    function handleLogoFallback(img, className, text) {
-      var span = document.createElement('span');
-      span.className = className;
-      span.textContent = text;
-      img.replaceWith(span);
-    }
-  </script>
 
   <script>
     // Generates the decorative "barcode" strip with irregular bar widths.
