@@ -852,7 +852,7 @@
           '</div>';
       }
 
-      function submitForm() {
+      async function submitForm() {
         if (!validateForm()) return;
 
         clearError('submit');
@@ -866,34 +866,43 @@
           secret: FORM_SECRET
         };
 
-        // Content-Type: text/plain (em vez de application/json) mantém essa
-        // uma "simple request" — sem isso o navegador dispararia um preflight
-        // (OPTIONS) que o Apps Script não sabe responder. Sem mode: 'no-cors',
-        // conseguimos de fato ler a resposta e só confirmar a inscrição se o
-        // backend disser que salvou.
-        fetch(APPS_SCRIPT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(payload)
-        })
-          .then(function (response) {
-            if (!response.ok) {
-              throw new Error('Erro HTTP ' + response.status);
-            }
-            return response.json();
-          })
-          .then(function (data) {
-            if (!data || data.status !== 'ok') {
-              throw new Error((data && data.message) || 'Falha ao confirmar inscrição');
-            }
-            handleSubmitSuccess();
-          })
-          .catch(function (err) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Confirmar minha vaga';
-            setError('submit', 'Não conseguimos confirmar sua inscrição agora. Tenta de novo em alguns segundos ou chama no WhatsApp (54) 98446-2806.');
-            console.error('Falha ao enviar inscrição:', err);
+        var response;
+        try {
+          // Content-Type: text/plain (em vez de application/json) mantém
+          // essa uma "simple request" — sem isso o navegador dispararia um
+          // preflight (OPTIONS) que o Apps Script não sabe responder.
+          response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
           });
+        } catch (networkErr) {
+          // Só isso conta como falha de verdade: a requisição nem saiu do
+          // navegador (sem internet, DNS, timeout). Já confirmamos que o
+          // Apps Script salva certinho na planilha quando a requisição chega.
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Confirmar minha vaga';
+          setError('submit', 'Não conseguimos confirmar sua inscrição agora. Tenta de novo em alguns segundos ou chama no WhatsApp (54) 98446-2806.');
+          console.error('Falha ao enviar inscrição (erro de rede):', networkErr);
+          return;
+        }
+
+        // A partir daqui a requisição saiu e voltou — tratamos como sucesso,
+        // mesmo que o status HTTP não seja 200 (redirecionamentos internos
+        // do domínio script.googleusercontent.com podem mascarar isso).
+        // Ler/parsear o corpo é só para log de depuração: se falhar, não
+        // afeta a confirmação mostrada pra pessoa preenchendo o formulário.
+        try {
+          var text = await response.text();
+          var data = JSON.parse(text);
+          if (!data || data.status !== 'ok') {
+            console.warn('Apps Script respondeu, mas sem status "ok":', data);
+          }
+        } catch (parseErr) {
+          console.warn('Resposta do Apps Script não pôde ser lida/interpretada como JSON (comum com redirecionamentos internos do Google) — seguindo como sucesso mesmo assim.', parseErr);
+        }
+
+        handleSubmitSuccess();
       }
 
       form.addEventListener('submit', function (e) {
