@@ -149,7 +149,6 @@
     margin: 0 auto;
     background: var(--cream);
     position: relative;
-    transform: rotate(-1deg);
     box-shadow: 0 18px 40px rgba(63, 68, 54, 0.18), 0 4px 10px rgba(63, 68, 54, 0.08);
     border-radius: 4px;
   }
@@ -422,9 +421,9 @@
   }
 
   .pix-key-value {
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-family: "Jost", sans-serif;
     font-weight: 500;
-    font-size: 0.8rem;
+    font-size: 0.95rem;
     color: var(--ink);
     overflow-wrap: anywhere;
   }
@@ -651,9 +650,10 @@
 
               <div class="invest-box">
                 <p class="invest-text">
-                  O investimento é de <strong>R$ 35,00</strong> por pessoa. Esse valor
-                  cobre toda a estrutura do nosso encontro, do tapete de pilates ao
-                  brunch compartilhado. Vagas limitadas, então garanta a sua com carinho.
+                  O investimento de <strong>R$ 35,00</strong> por pessoa garante sua
+                  vaga nessa manhã especial — aula de pilates, brunch e brincadeiras
+                  pensadas com carinho pra celebrar esse 1 ano de Vaidosa. Vagas
+                  limitadas, garanta a sua!
                 </p>
               </div>
 
@@ -674,17 +674,17 @@
 
         <div class="pix-key-row">
           <div class="pix-key-box">
-            <span class="pix-key-label">Pix Copia e Cola</span>
-            <span class="pix-key-value" id="pix-key-value"></span>
+            <span class="pix-key-label">Chave Pix</span>
+            <span class="pix-key-value" id="pix-key-value">SUA_CHAVE_PIX_AQUI</span>
           </div>
-          <button type="button" class="pix-copy-btn" id="pix-copy-btn">Copiar código</button>
+          <button type="button" class="pix-copy-btn" id="pix-copy-btn">Copiar chave</button>
         </div>
 
         <p class="pix-note">
-          Copie o código, cole no Pix do seu banco e manda o comprovante pelo
-          WhatsApp
+          Copie a chave, abra o Pix no seu banco e envie o pagamento. Depois
+          manda o comprovante pelo WhatsApp
           <a href="https://wa.me/5554984462806" target="_blank" rel="noopener">(54) 98446-2806</a>
-          pra garantir sua vaga.
+          pra confirmar sua presença.
         </p>
       </div>
 
@@ -743,6 +743,13 @@
     // Publique o apps-script.gs como "Aplicativo da Web" (veja DEPLOY.md) e
     // cole a URL gerada aqui, no lugar do placeholder abaixo.
     var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzm0uuzHFAO33tFOg6b5DLI4kEEY-hWAnIrygAQH82_98VUmDNArzaO1o-enzlmGmFQA/exec';
+
+    // ATENÇÃO: FORM_SECRET precisa ser IGUAL ao valor definido no topo do
+    // apps-script.gs (a constante FORM_SECRET de lá). É só um filtro simples
+    // contra bots automatizados batendo na URL pública — não é segurança
+    // forte. Gere um código aleatório e cole o MESMO valor nos dois lugares
+    // (index.html e apps-script.gs) antes de publicar.
+    var FORM_SECRET = 'TROCAR_POR_UM_CODIGO_SECRETO';
 
     // ---------- Ticket registration form ----------
     (function ticketForm() {
@@ -862,26 +869,36 @@
         var payload = {
           nome: nameInput.value.trim(),
           whatsapp: phoneInput.value,
-          tamanho: sizeInput.value
+          tamanho: sizeInput.value,
+          secret: FORM_SECRET
         };
 
-        // O Apps Script Web App não responde com cabeçalhos CORS, então o
-        // navegador bloquearia a leitura da resposta. Com mode: 'no-cors' a
-        // requisição é enviada normalmente, só não conseguimos ler o corpo
-        // da resposta — por isso tratamos "não deu erro de rede" como sucesso.
+        // Content-Type: text/plain (em vez de application/json) mantém essa
+        // uma "simple request" — sem isso o navegador dispararia um preflight
+        // (OPTIONS) que o Apps Script não sabe responder. Sem mode: 'no-cors',
+        // conseguimos de fato ler a resposta e só confirmar a inscrição se o
+        // backend disser que salvou.
         fetch(APPS_SCRIPT_URL, {
           method: 'POST',
-          mode: 'no-cors',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(payload)
         })
-          .then(function () {
+          .then(function (response) {
+            if (!response.ok) {
+              throw new Error('Erro HTTP ' + response.status);
+            }
+            return response.json();
+          })
+          .then(function (data) {
+            if (!data || data.status !== 'ok') {
+              throw new Error((data && data.message) || 'Falha ao confirmar inscrição');
+            }
             handleSubmitSuccess();
           })
           .catch(function (err) {
             submitBtn.disabled = false;
             submitBtn.textContent = 'Confirmar minha vaga';
-            setError('submit', 'Não foi possível enviar sua inscrição. Verifique sua internet e tente novamente.');
+            setError('submit', 'Não conseguimos confirmar sua inscrição agora. Tenta de novo em alguns segundos ou chama no WhatsApp (54) 98446-2806.');
             console.error('Falha ao enviar inscrição:', err);
           });
       }
@@ -894,9 +911,11 @@
   </script>
 
   <script>
-    var PIX_COPIA_E_COLA = '00020101021126330014br.gov.bcb.pix011104227445060520400005303986540535.005802BR5915ANACLARABOSCO6008BRASILIA62080504SXQR6304D054';
+    // Chave Pix curta (email, telefone, CPF/CNPJ ou chave aleatória).
+    // Troque o valor abaixo pela chave real.
+    var PIX_KEY = 'SUA_CHAVE_PIX_AQUI';
 
-    // ---------- Copiar código Pix Copia e Cola ----------
+    // ---------- Copiar chave Pix ----------
     (function pixCopy() {
       var copyBtn = document.getElementById('pix-copy-btn');
       var keyValue = document.getElementById('pix-key-value');
@@ -904,20 +923,11 @@
 
       var defaultLabel = copyBtn.textContent;
       var resetTimer = null;
-      var PREVIEW_HEAD = 20;
-      var PREVIEW_TAIL = 10;
 
-      function buildPreview(code) {
-        if (code.length <= PREVIEW_HEAD + PREVIEW_TAIL + 3) return code;
-        return code.slice(0, PREVIEW_HEAD) + '...' + code.slice(-PREVIEW_TAIL);
-      }
-
-      // A caixa só mostra uma prévia truncada — o código completo (a
-      // constante acima) é o que de fato vai pro clipboard no clique.
-      keyValue.textContent = buildPreview(PIX_COPIA_E_COLA);
+      keyValue.textContent = PIX_KEY;
 
       copyBtn.addEventListener('click', function () {
-        navigator.clipboard.writeText(PIX_COPIA_E_COLA).then(function () {
+        navigator.clipboard.writeText(PIX_KEY).then(function () {
           clearTimeout(resetTimer);
           copyBtn.textContent = 'Copiado!';
           resetTimer = setTimeout(function () {
