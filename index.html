@@ -22,6 +22,9 @@
     --ink: #3E4436;
     --ink-soft: #6B7561;
     --alert: #9A4A48;
+    /* bottom stop of the hero gradient — a touch lighter than --sage-dark,
+       still dark enough to keep --cream text above 4.5:1 */
+    --hero-shade: #5C6650;
   }
 
   * { box-sizing: border-box; }
@@ -69,7 +72,7 @@
     position: relative;
     padding: 4.5rem 1.5rem 6.5rem;
     text-align: center;
-    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%);
+    background: linear-gradient(180deg, var(--sage-dark) 0%, var(--hero-shade) 100%);
     overflow: hidden;
   }
 
@@ -91,9 +94,9 @@
   }
 
   .hero .eyebrow {
-    /* darker than --sage-dark so it stays readable across the whole
-       sky gradient, including the darker top edge */
-    color: var(--ink);
+    /* hero background is now the dark --sage-dark/--hero-shade green,
+       so light text is needed for contrast */
+    color: var(--cream);
   }
 
   .hero h1 {
@@ -103,16 +106,14 @@
     font-size: clamp(2.75rem, 12vw, 4.5rem);
     line-height: 1.05;
     margin: 0.6rem 0 1rem;
-    color: var(--ink);
+    color: var(--cream);
   }
 
   .hero p.subtitle {
     font-weight: 300;
     font-size: 1.05rem;
     line-height: 1.6;
-    /* --ink-soft reads under 4.5:1 against parts of the sky gradient;
-       --ink keeps contrast safe across the whole hero */
-    color: var(--ink);
+    color: rgba(251, 248, 240, 0.85);
     margin: 0 auto 1.75rem;
     max-width: 30rem;
   }
@@ -162,10 +163,11 @@
   }
 
   /* the notch cut-outs need the page bg behind them to read as "punched",
-     so we layer a mask that reveals the gradient/cream sitting under the hero */
+     so we layer a mask that reveals the hero's bottom edge color sitting
+     behind the ticket */
   .ticket-scallop {
     background-image: radial-gradient(circle at 9px 9px, var(--cream) 9px, transparent 9.5px);
-    background-color: var(--sky-bottom);
+    background-color: var(--hero-shade);
   }
 
   .ticket-body {
@@ -415,9 +417,9 @@
   }
 
   .pix-key-value {
-    font-family: "Jost", sans-serif;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: 0.8rem;
     color: var(--ink);
     overflow-wrap: anywhere;
   }
@@ -633,7 +635,6 @@
               <div class="field-group">
                 <span class="field-label">Tamanho de camiseta</span>
                 <div class="size-chips" id="size-chips" role="group" aria-label="Tamanho de camiseta">
-                  <button type="button" class="size-chip" data-size="PP" aria-pressed="false">PP</button>
                   <button type="button" class="size-chip" data-size="P" aria-pressed="false">P</button>
                   <button type="button" class="size-chip" data-size="M" aria-pressed="false">M</button>
                   <button type="button" class="size-chip" data-size="G" aria-pressed="false">G</button>
@@ -668,15 +669,16 @@
 
         <div class="pix-key-row">
           <div class="pix-key-box">
-            <span class="pix-key-label">Chave Pix</span>
-            <span class="pix-key-value" id="pix-key-value">04227445060</span>
+            <span class="pix-key-label">Pix Copia e Cola</span>
+            <span class="pix-key-value" id="pix-key-value"></span>
           </div>
-          <button type="button" class="pix-copy-btn" id="pix-copy-btn">Copiar chave</button>
+          <button type="button" class="pix-copy-btn" id="pix-copy-btn">Copiar código</button>
         </div>
 
         <p class="pix-note">
-          Depois de fazer o Pix de <strong>R$ 35,00</strong>, envie o comprovante
-          pelo WhatsApp
+          Toque em <strong>Copiar código</strong>, abra o Pix no seu banco,
+          escolha a opção "Pix Copia e Cola" e cole o código. Depois envie o
+          comprovante pelo WhatsApp
           <a href="https://wa.me/5554984462806" target="_blank" rel="noopener">(54) 98446-2806</a>
           para confirmar sua presença.
         </p>
@@ -888,7 +890,9 @@
   </script>
 
   <script>
-    // ---------- Copiar chave Pix ----------
+    var PIX_COPIA_E_COLA = '00020101021126330014br.gov.bcb.pix011104227445060520400005303986540535.005802BR5915ANACLARABOSCO6008BRASILIA62080504SXQR6304D054';
+
+    // ---------- Copiar código Pix Copia e Cola ----------
     (function pixCopy() {
       var copyBtn = document.getElementById('pix-copy-btn');
       var keyValue = document.getElementById('pix-key-value');
@@ -896,11 +900,20 @@
 
       var defaultLabel = copyBtn.textContent;
       var resetTimer = null;
+      var PREVIEW_HEAD = 20;
+      var PREVIEW_TAIL = 10;
+
+      function buildPreview(code) {
+        if (code.length <= PREVIEW_HEAD + PREVIEW_TAIL + 3) return code;
+        return code.slice(0, PREVIEW_HEAD) + '...' + code.slice(-PREVIEW_TAIL);
+      }
+
+      // A caixa só mostra uma prévia truncada — o código completo (a
+      // constante acima) é o que de fato vai pro clipboard no clique.
+      keyValue.textContent = buildPreview(PIX_COPIA_E_COLA);
 
       copyBtn.addEventListener('click', function () {
-        var key = keyValue.textContent.trim();
-
-        navigator.clipboard.writeText(key).then(function () {
+        navigator.clipboard.writeText(PIX_COPIA_E_COLA).then(function () {
           clearTimeout(resetTimer);
           copyBtn.textContent = 'Copiado!';
           resetTimer = setTimeout(function () {
