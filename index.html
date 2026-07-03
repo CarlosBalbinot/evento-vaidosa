@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conexão & Energia — Vaidosa Fitness</title>
+<meta name="description" content="Comemore 1 ano da Vaidosa Fitness: aula de pilates com Talya Portaluppi, brunch e brincadeiras ao ar livre. 25/07/2026, sábado, 9h.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,500;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --sky-top: #A9C3DD;
+    --sky-bottom: #EAF2FA;
+    --sage: #7C8A68;
+    --sage-dark: #4F5943;
+    --cream: #FBF8F0;
+    --blush: #E7B6B9;
+    --blush-light: #EEC5C7;
+    --ink: #3E4436;
+    --ink-soft: #6B7561;
+    --alert: #9A4A48;
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    margin: 0;
+    font-family: "Jost", sans-serif;
+    font-weight: 400;
+    color: var(--ink);
+    background: var(--cream);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  img { max-width: 100%; display: block; }
+
+  a { color: inherit; }
+
+  /* Visible focus state for accessibility */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 3px solid var(--sage-dark);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  .eyebrow {
+    font-family: "Jost", sans-serif;
+    font-weight: 500;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- HERO ---------- */
+
+  .hero {
+    position: relative;
+    padding: 4.5rem 1.5rem 6.5rem;
+    text-align: center;
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    /* subtle dotted texture */
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.5) 1px, transparent 1px);
+    background-size: 22px 22px;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .hero-inner {
+    position: relative;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .hero .eyebrow {
+    /* darker than --sage-dark so it stays readable across the whole
+       sky gradient, including the darker top edge */
+    color: var(--ink);
+  }
+
+  .hero h1 {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(2.75rem, 12vw, 4.5rem);
+    line-height: 1.05;
+    margin: 0.6rem 0 1rem;
+    color: var(--ink);
+  }
+
+  .hero p.subtitle {
+    font-weight: 300;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    /* --ink-soft reads under 4.5:1 against parts of the sky gradient;
+       --ink keeps contrast safe across the whole hero */
+    color: var(--ink);
+    margin: 0 auto 1.75rem;
+    max-width: 30rem;
+  }
+
+  .date-pill {
+    display: inline-block;
+    background: var(--cream);
+    color: var(--sage-dark);
+    font-weight: 500;
+    font-size: 0.85rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.65rem 1.4rem;
+    border-radius: 999px;
+    box-shadow: 0 4px 14px rgba(63, 68, 54, 0.15);
+  }
+
+  /* ---------- TICKET CARD ---------- */
+
+  .ticket-section {
+    padding: 0 1.25rem 4rem;
+    margin-top: -3.5rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .ticket {
+    max-width: 440px;
+    margin: 0 auto;
+    background: var(--cream);
+    position: relative;
+    transform: rotate(-1deg);
+    box-shadow: 0 18px 40px rgba(63, 68, 54, 0.18), 0 4px 10px rgba(63, 68, 54, 0.08);
+    border-radius: 4px;
+  }
+
+  /* Scalloped top edge, made of repeating circular "bites" */
+  .ticket-scallop {
+    height: 18px;
+    width: 100%;
+    background-image: radial-gradient(circle at 9px 0, transparent 9px, var(--sky-bottom) 9.5px);
+    background-size: 18px 18px;
+    background-position: top;
+    background-repeat: repeat-x;
+    background-color: transparent;
+    transform: translateY(-1px);
+  }
+
+  /* the notch cut-outs need the page bg behind them to read as "punched",
+     so we layer a mask that reveals the gradient/cream sitting under the hero */
+  .ticket-scallop {
+    background-image: radial-gradient(circle at 9px 9px, var(--cream) 9px, transparent 9.5px);
+    background-color: var(--sky-bottom);
+  }
+
+  .ticket-body {
+    padding: 2.2rem 1.75rem 0;
+  }
+
+  .ticket-body h2 {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 2rem;
+    margin: 0 0 0.75rem;
+    color: var(--ink);
+    text-align: center;
+  }
+
+  .ticket-body .invest-text {
+    font-weight: 300;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    text-align: center;
+    margin: 0 auto 1.75rem;
+    max-width: 32rem;
+  }
+
+  .invest-text strong {
+    color: var(--sage-dark);
+    font-weight: 500;
+  }
+
+  #ticket-form-wrap {
+    margin-bottom: 1.75rem;
+  }
+
+  .field-group {
+    text-align: left;
+    margin-bottom: 1.25rem;
+  }
+
+  .field-label {
+    display: block;
+    font-family: "Jost", sans-serif;
+    font-weight: 500;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 0.4rem;
+  }
+
+  .field-input {
+    width: 100%;
+    font-family: "Jost", sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    color: var(--ink);
+    background: #FFFFFF;
+    border: 1.5px solid rgba(124, 138, 104, 0.35);
+    border-radius: 8px;
+    padding: 0.75rem 0.9rem;
+    transition: border-color 0.15s ease;
+  }
+
+  .field-input::placeholder {
+    color: rgba(107, 117, 97, 0.55);
+  }
+
+  .field-input:focus {
+    border-color: var(--sage-dark);
+  }
+
+  .field-input.invalid,
+  .size-chips.invalid {
+    border-color: var(--alert);
+  }
+
+  .field-error {
+    min-height: 1rem;
+    margin: 0.35rem 0 0;
+    font-size: 0.72rem;
+    font-weight: 400;
+    color: var(--alert);
+  }
+
+  .field-error:empty {
+    display: none;
+  }
+
+  .size-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    border-radius: 8px;
+  }
+
+  .size-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    font-family: "Jost", sans-serif;
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    background: #FFFFFF;
+    border: 1.5px solid rgba(124, 138, 104, 0.35);
+    border-radius: 999px;
+    padding: 0.5rem 1.05rem;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .size-chip:hover {
+    border-color: var(--sage);
+  }
+
+  .size-chip.selected {
+    /* --sage-dark (not --sage) keeps the cream label text above 4.5:1 */
+    background: var(--sage-dark);
+    border-color: var(--sage-dark);
+    color: var(--cream);
+  }
+
+  .invest-box {
+    background: rgba(231, 182, 185, 0.22);
+    border-radius: 10px;
+    padding: 1rem 1.1rem;
+    margin: 0.5rem 0 1.5rem;
+  }
+
+  .invest-box .invest-text {
+    margin: 0;
+    text-align: left;
+    max-width: none;
+  }
+
+  .submit-btn {
+    display: block;
+    width: 100%;
+    font-family: "Jost", sans-serif;
+    font-weight: 500;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    color: var(--cream);
+    background: var(--sage-dark);
+    border: none;
+    border-radius: 10px;
+    padding: 0.95rem 1rem;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+
+  .submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .success-message {
+    text-align: center;
+    padding: 0.5rem 0 0.25rem;
+  }
+
+  .success-message h3 {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.55rem;
+    color: var(--sage-dark);
+    margin: 0 0 0.6rem;
+  }
+
+  .success-message p {
+    font-weight: 300;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  /* Perforation line separating data section from payment/confirmation */
+  .perforation {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
+  }
+
+  .perforation::before {
+    content: "";
+    flex: 1;
+    border-top: 2px dashed var(--sage);
+    opacity: 0.55;
+  }
+
+  .perf-hole {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--sky-bottom);
+    box-shadow: 0 0 0 1px rgba(124, 138, 104, 0.25) inset;
+    flex-shrink: 0;
+  }
+
+  .perf-hole.left { margin-right: -9px; margin-left: -18px; }
+  .perf-hole.right { margin-left: -9px; margin-right: -18px; }
+
+  .pix-section {
+    padding: 1.75rem 1.75rem 0;
+  }
+
+  .pix-title {
+    font-family: "Jost", sans-serif;
+    font-weight: 500;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 0.75rem;
+  }
+
+  .pix-key-row {
+    display: flex;
+    gap: 0.6rem;
+    align-items: stretch;
+    margin-bottom: 1rem;
+  }
+
+  .pix-key-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.15rem;
+    background: #FFFFFF;
+    border: 1.5px dashed var(--blush);
+    border-radius: 10px;
+    padding: 0.7rem 0.95rem;
+    min-width: 0;
+  }
+
+  .pix-key-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .pix-key-value {
+    font-family: "Jost", sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: var(--ink);
+    overflow-wrap: anywhere;
+  }
+
+  .pix-copy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-height: 44px;
+    font-family: "Jost", sans-serif;
+    font-weight: 500;
+    font-size: 0.82rem;
+    color: var(--cream);
+    background: var(--sage-dark);
+    border: none;
+    border-radius: 10px;
+    padding: 0 1.1rem;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .pix-copy-btn:hover {
+    opacity: 0.9;
+  }
+
+  .pix-note {
+    font-weight: 300;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .pix-note a {
+    color: var(--sage-dark);
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .submit-error {
+    text-align: center;
+    margin-top: 0.75rem;
+  }
+
+  /* Decorative barcode strip */
+  .barcode {
+    margin-top: 1.75rem;
+    padding: 1.1rem 1.75rem 1.5rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 52px;
+    overflow: hidden;
+  }
+
+  .barcode span {
+    display: inline-block;
+    background: var(--ink);
+    opacity: 0.85;
+    height: 100%;
+  }
+
+  .ticket-code {
+    text-align: center;
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    color: var(--ink-soft);
+    padding-bottom: 1.25rem;
+  }
+
+  /* ---------- FOOTER ---------- */
+
+  footer {
+    background: var(--sage-dark);
+    color: var(--cream);
+    padding: 3rem 1.5rem;
+    text-align: center;
+  }
+
+  .wordmarks {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .wordmark-brand {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.6rem;
+    color: var(--cream);
+  }
+
+  .logo {
+    max-height: 44px;
+    width: auto;
+    display: block;
+  }
+
+  .wordmark-amp {
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    /* lighter tint than --blush so it clears 4.5:1 on --sage-dark */
+    color: var(--blush-light);
+  }
+
+  .wordmark-talya {
+    font-family: "Jost", sans-serif;
+    font-weight: 400;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(251, 248, 240, 0.8);
+  }
+
+  footer .fine-print {
+    margin-top: 1.75rem;
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: rgba(251, 248, 240, 0.75);
+  }
+
+  /* ---------- SMALL PHONES (<=360px) ---------- */
+
+  @media (max-width: 360px) {
+    .pix-key-row {
+      flex-wrap: wrap;
+    }
+
+    .pix-copy-btn {
+      width: 100%;
+    }
+  }
+
+  /* ---------- DESKTOP (>768px) ---------- */
+
+  @media (min-width: 768px) {
+    .hero {
+      padding: 6rem 2rem 8rem;
+    }
+
+    .hero-inner {
+      max-width: 720px;
+    }
+
+    .ticket-section {
+      max-width: 768px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: -4.5rem;
+    }
+
+    .ticket {
+      max-width: 480px;
+    }
+
+    .wordmarks {
+      flex-direction: row;
+      justify-content: center;
+      gap: 1.1rem;
+    }
+
+    .logo {
+      max-height: 56px;
+    }
+
+    footer .fine-print {
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">1 Ano Vaidosa Fitness</p>
+      <h1>Conexão &amp; Energia</h1>
+      <p class="subtitle">Uma manhã de pilates, brunch e bem-estar ao ar livre para celebrar juntas esse primeiro ano.</p>
+      <span class="date-pill">25 Jul · Sábado · 9h</span>
+    </div>
+  </section>
+
+  <section class="ticket-section">
+    <div class="ticket">
+      <div class="ticket-scallop" aria-hidden="true"></div>
+
+      <div class="ticket-body">
+        <div id="ticket-stage">
+          <h2>Garanta sua vaga</h2>
+
+          <div id="ticket-form-wrap">
+            <form id="ticket-form" novalidate>
+              <div class="field-group">
+                <label class="field-label" for="field-name">Nome completo</label>
+                <input class="field-input" type="text" id="field-name" name="name" placeholder="Seu nome completo" autocomplete="name">
+                <p class="field-error" id="error-name"></p>
+              </div>
+
+              <div class="field-group">
+                <label class="field-label" for="field-phone">WhatsApp</label>
+                <input class="field-input" type="tel" id="field-phone" name="phone" placeholder="(99) 99999-9999" inputmode="numeric" autocomplete="tel" maxlength="15">
+                <p class="field-error" id="error-phone"></p>
+              </div>
+
+              <div class="field-group">
+                <span class="field-label">Tamanho de camiseta</span>
+                <div class="size-chips" id="size-chips" role="group" aria-label="Tamanho de camiseta">
+                  <button type="button" class="size-chip" data-size="PP" aria-pressed="false">PP</button>
+                  <button type="button" class="size-chip" data-size="P" aria-pressed="false">P</button>
+                  <button type="button" class="size-chip" data-size="M" aria-pressed="false">M</button>
+                  <button type="button" class="size-chip" data-size="G" aria-pressed="false">G</button>
+                  <button type="button" class="size-chip" data-size="GG" aria-pressed="false">GG</button>
+                </div>
+                <input type="hidden" id="field-size" name="size" value="">
+                <p class="field-error" id="error-size"></p>
+              </div>
+
+              <div class="invest-box">
+                <p class="invest-text">
+                  O investimento é de <strong>R$ 35,00</strong> por pessoa e ajuda a
+                  cobrir toda a estrutura do nosso encontro — do tapete de pilates ao
+                  brunch compartilhado. Vagas limitadas, então garanta a sua com carinho.
+                </p>
+              </div>
+
+              <button type="submit" class="submit-btn" id="submit-btn">Confirmar minha vaga</button>
+              <p class="field-error submit-error" id="error-submit"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="perforation" aria-hidden="true">
+        <span class="perf-hole left"></span>
+        <span class="perf-hole right"></span>
+      </div>
+
+      <div class="pix-section">
+        <p class="pix-title">Pagamento</p>
+
+        <div class="pix-key-row">
+          <div class="pix-key-box">
+            <span class="pix-key-label">Chave Pix</span>
+            <span class="pix-key-value" id="pix-key-value">04227445060</span>
+          </div>
+          <button type="button" class="pix-copy-btn" id="pix-copy-btn">Copiar chave</button>
+        </div>
+
+        <p class="pix-note">
+          Depois de fazer o Pix de <strong>R$ 35,00</strong>, envie o comprovante
+          pelo WhatsApp
+          <a href="https://wa.me/5554984462806" target="_blank" rel="noopener">(54) 98446-2806</a>
+          para confirmar sua presença.
+        </p>
+      </div>
+
+      <div class="barcode" aria-hidden="true" id="barcode"></div>
+      <p class="ticket-code">CONEXÃO &amp; ENERGIA · 25.07.2026</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wordmarks">
+      <!--
+        Coloque aqui os arquivos logo-vaidosa.png e logo-talya.png dentro da
+        pasta assets/ (fundo transparente, PNG ou SVG, altura mínima de
+        200px pra ficar nítido em qualquer tela).
+      -->
+      <img src="assets/logo-vaidosa.png" alt="Vaidosa Fitness" class="logo logo-vaidosa" onerror="handleLogoFallback(this, 'wordmark-brand', 'vaidosa fitness')">
+      <span class="wordmark-amp">&amp;</span>
+      <img src="assets/logo-talya.png" alt="Talya Portaluppi — Pilates &amp; Bem-Estar" class="logo logo-talya" onerror="handleLogoFallback(this, 'wordmark-talya', 'Talya Portaluppi — Pilates &amp; Bem-Estar')">
+    </div>
+    <p class="fine-print">Vagas limitadas · Ao ar livre · Leve seu tapete e sua energia</p>
+  </footer>
+
+  <script>
+    // ---------- Fallback dos logos do rodapé ----------
+    // Se assets/logo-vaidosa.png ou assets/logo-talya.png não carregar,
+    // troca a tag <img> pelo texto do wordmark correspondente.
+    function handleLogoFallback(img, className, text) {
+      var span = document.createElement('span');
+      span.className = className;
+      span.textContent = text;
+      img.replaceWith(span);
+    }
+  </script>
+
+  <script>
+    // Generates the decorative "barcode" strip with irregular bar widths.
+    // Purely visual — carries no encoded data. Bars use flex-grow (weighted
+    // by the original width ratios, basis 0) instead of fixed px widths so
+    // the strip always stretches to fill 100% of the card, on any screen.
+    (function renderBarcode() {
+      var container = document.getElementById('barcode');
+      var widths = [2, 1, 3, 1, 1, 4, 2, 1, 1, 3, 2, 1, 4, 1, 2, 1, 3, 1, 1, 2, 4, 1, 2, 1, 3, 2, 1, 1, 4, 1, 2, 3, 1, 1, 2];
+      var heights = [100, 60, 85, 45, 70, 100, 55, 90, 40, 75, 100, 50, 80, 100, 60, 45, 95, 65, 100, 55, 80, 40, 100, 70, 90, 50, 100, 60, 45, 100, 75, 85, 55, 100, 65];
+
+      widths.forEach(function (w, i) {
+        var bar = document.createElement('span');
+        bar.style.flex = w + ' 0 0';
+        bar.style.height = (heights[i % heights.length]) + '%';
+        container.appendChild(bar);
+      });
+    })();
+  </script>
+
+  <script>
+    // URL do Google Apps Script (Web App) que grava a inscrição na planilha.
+    // Publique o apps-script.gs como "Aplicativo da Web" (veja DEPLOY.md) e
+    // cole a URL gerada aqui, no lugar do placeholder abaixo.
+    var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzm0uuzHFAO33tFOg6b5DLI4kEEY-hWAnIrygAQH82_98VUmDNArzaO1o-enzlmGmFQA/exec';
+
+    // ---------- Ticket registration form ----------
+    (function ticketForm() {
+      var form = document.getElementById('ticket-form');
+      if (!form) return;
+
+      var nameInput = document.getElementById('field-name');
+      var phoneInput = document.getElementById('field-phone');
+      var sizeInput = document.getElementById('field-size');
+      var chipsContainer = document.getElementById('size-chips');
+      var chips = chipsContainer.querySelectorAll('.size-chip');
+      var submitBtn = document.getElementById('submit-btn');
+
+      function maskPhone(value) {
+        value = value.replace(/\D/g, '').slice(0, 11);
+        if (value.length > 10) {
+          value = value.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
+        } else if (value.length > 6) {
+          value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+        } else if (value.length > 2) {
+          value = value.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+        } else if (value.length > 0) {
+          value = value.replace(/^(\d{0,2})/, '($1');
+        }
+        return value;
+      }
+
+      phoneInput.addEventListener('input', function () {
+        phoneInput.value = maskPhone(phoneInput.value);
+        if (phoneInput.value.replace(/\D/g, '').length >= 10) clearError('phone');
+      });
+
+      nameInput.addEventListener('input', function () {
+        if (nameInput.value.trim()) clearError('name');
+      });
+
+      chips.forEach(function (chip) {
+        chip.addEventListener('click', function () {
+          chips.forEach(function (c) {
+            c.classList.remove('selected');
+            c.setAttribute('aria-pressed', 'false');
+          });
+          chip.classList.add('selected');
+          chip.setAttribute('aria-pressed', 'true');
+          sizeInput.value = chip.dataset.size;
+          clearError('size');
+        });
+      });
+
+      function setError(field, message) {
+        var errorEl = document.getElementById('error-' + field);
+        if (errorEl) errorEl.textContent = message;
+        if (field === 'size') {
+          chipsContainer.classList.add('invalid');
+        } else {
+          var inputEl = document.getElementById('field-' + field);
+          if (inputEl) inputEl.classList.add('invalid');
+        }
+      }
+
+      function clearError(field) {
+        var errorEl = document.getElementById('error-' + field);
+        if (errorEl) errorEl.textContent = '';
+        if (field === 'size') {
+          chipsContainer.classList.remove('invalid');
+        } else {
+          var inputEl = document.getElementById('field-' + field);
+          if (inputEl) inputEl.classList.remove('invalid');
+        }
+      }
+
+      function validateForm() {
+        var valid = true;
+
+        var name = nameInput.value.trim();
+        if (!name) {
+          setError('name', 'Informe seu nome completo.');
+          valid = false;
+        } else {
+          clearError('name');
+        }
+
+        var phoneDigits = phoneInput.value.replace(/\D/g, '');
+        if (phoneDigits.length < 10) {
+          setError('phone', 'Informe um WhatsApp válido com DDD.');
+          valid = false;
+        } else {
+          clearError('phone');
+        }
+
+        if (!sizeInput.value) {
+          setError('size', 'Selecione o tamanho da camiseta.');
+          valid = false;
+        } else {
+          clearError('size');
+        }
+
+        return valid;
+      }
+
+      function handleSubmitSuccess() {
+        var stage = document.getElementById('ticket-stage');
+        stage.innerHTML =
+          '<div class="success-message">' +
+            '<h3>Inscrição recebida!</h3>' +
+            '<p>Agora só falta confirmar o pagamento abaixo.</p>' +
+          '</div>';
+      }
+
+      function submitForm() {
+        if (!validateForm()) return;
+
+        clearError('submit');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando...';
+
+        var payload = {
+          nome: nameInput.value.trim(),
+          whatsapp: phoneInput.value,
+          tamanho: sizeInput.value
+        };
+
+        // O Apps Script Web App não responde com cabeçalhos CORS, então o
+        // navegador bloquearia a leitura da resposta. Com mode: 'no-cors' a
+        // requisição é enviada normalmente, só não conseguimos ler o corpo
+        // da resposta — por isso tratamos "não deu erro de rede" como sucesso.
+        fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        })
+          .then(function () {
+            handleSubmitSuccess();
+          })
+          .catch(function (err) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Confirmar minha vaga';
+            setError('submit', 'Não foi possível enviar sua inscrição. Verifique sua internet e tente novamente.');
+            console.error('Falha ao enviar inscrição:', err);
+          });
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        submitForm();
+      });
+    })();
+  </script>
+
+  <script>
+    // ---------- Copiar chave Pix ----------
+    (function pixCopy() {
+      var copyBtn = document.getElementById('pix-copy-btn');
+      var keyValue = document.getElementById('pix-key-value');
+      if (!copyBtn || !keyValue) return;
+
+      var defaultLabel = copyBtn.textContent;
+      var resetTimer = null;
+
+      copyBtn.addEventListener('click', function () {
+        var key = keyValue.textContent.trim();
+
+        navigator.clipboard.writeText(key).then(function () {
+          clearTimeout(resetTimer);
+          copyBtn.textContent = 'Copiado!';
+          resetTimer = setTimeout(function () {
+            copyBtn.textContent = defaultLabel;
+          }, 2000);
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
