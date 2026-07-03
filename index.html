@@ -15,16 +15,19 @@
     --sky-top: #A9C3DD;
     --sky-bottom: #EAF2FA;
     --sage: #7C8A68;
-    --sage-dark: #4F5943;
+    /* medium sage-olive, between --sage and the old (heavier) --sage-dark —
+       used as the page's one accent color (button, footer), not the hero bg */
+    --sage-dark: #667256;
     --cream: #FBF8F0;
     --blush: #E7B6B9;
-    --blush-light: #EEC5C7;
+    /* deep, more saturated blush — enough contrast to use as small text on
+       --cream, while staying in the same rose family as --blush */
+    --blush-dark: #A3595E;
+    /* very light blush tint, used for the footer "&" on --sage-dark */
+    --blush-light: #FCF0F1;
     --ink: #3E4436;
     --ink-soft: #6B7561;
     --alert: #9A4A48;
-    /* bottom stop of the hero gradient — a touch lighter than --sage-dark,
-       still dark enough to keep --cream text above 4.5:1 */
-    --hero-shade: #5C6650;
   }
 
   * { box-sizing: border-box; }
@@ -72,7 +75,7 @@
     position: relative;
     padding: 4.5rem 1.5rem 6.5rem;
     text-align: center;
-    background: linear-gradient(180deg, var(--sage-dark) 0%, var(--hero-shade) 100%);
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-bottom) 100%);
     overflow: hidden;
   }
 
@@ -94,9 +97,9 @@
   }
 
   .hero .eyebrow {
-    /* hero background is now the dark --sage-dark/--hero-shade green,
-       so light text is needed for contrast */
-    color: var(--cream);
+    /* darker than --sage-dark so it stays readable across the whole
+       sky gradient, including the darker top edge */
+    color: var(--ink);
   }
 
   .hero h1 {
@@ -106,14 +109,14 @@
     font-size: clamp(2.75rem, 12vw, 4.5rem);
     line-height: 1.05;
     margin: 0.6rem 0 1rem;
-    color: var(--cream);
+    color: var(--ink);
   }
 
   .hero p.subtitle {
     font-weight: 300;
     font-size: 1.05rem;
     line-height: 1.6;
-    color: rgba(251, 248, 240, 0.85);
+    color: var(--ink);
     margin: 0 auto 1.75rem;
     max-width: 30rem;
   }
@@ -127,6 +130,7 @@
     letter-spacing: 0.14em;
     text-transform: uppercase;
     padding: 0.65rem 1.4rem;
+    border: 1.5px solid var(--blush);
     border-radius: 999px;
     box-shadow: 0 4px 14px rgba(63, 68, 54, 0.15);
   }
@@ -150,24 +154,23 @@
     border-radius: 4px;
   }
 
-  /* Scalloped top edge, made of repeating circular "bites" */
+  /* Scalloped top edge: a row of --cream half-circle bumps, each one
+     centered on the strip's BOTTOM edge (so only its upper half — the
+     rounded top — is visible) with radius = tile-width / 2, so neighboring
+     bumps are tangent and read as one smooth wavy edge, cream side up.
+     --sky-bottom (an approximation of the hero's own bottom-edge color)
+     fills the small cusps between bumps. No transform/offset here — that
+     was opening a 1px gap of the ticket's own cream background above the
+     strip, reading as a stray extra line ("double step") between hero and
+     scallop. */
   .ticket-scallop {
-    height: 18px;
+    height: 16px;
     width: 100%;
-    background-image: radial-gradient(circle at 9px 0, transparent 9px, var(--sky-bottom) 9.5px);
-    background-size: 18px 18px;
+    background-color: var(--sky-bottom);
+    background-image: radial-gradient(circle at 16px 16px, var(--cream) 15.5px, transparent 16px);
+    background-size: 32px 16px;
     background-position: top;
     background-repeat: repeat-x;
-    background-color: transparent;
-    transform: translateY(-1px);
-  }
-
-  /* the notch cut-outs need the page bg behind them to read as "punched",
-     so we layer a mask that reveals the hero's bottom edge color sitting
-     behind the ticket */
-  .ticket-scallop {
-    background-image: radial-gradient(circle at 9px 9px, var(--cream) 9px, transparent 9.5px);
-    background-color: var(--hero-shade);
   }
 
   .ticket-body {
@@ -385,15 +388,15 @@
     font-size: 0.72rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--ink-soft);
-    margin: 0 0 0.75rem;
+    color: var(--blush-dark);
+    margin: 0 0 1.5rem;
   }
 
   .pix-key-row {
     display: flex;
     gap: 0.6rem;
     align-items: stretch;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .pix-key-box {
@@ -403,7 +406,9 @@
     justify-content: center;
     gap: 0.15rem;
     background: #FFFFFF;
-    border: 1.5px dashed var(--blush);
+    /* neutral, low-opacity border — reads as part of the card instead of
+       calling out a color */
+    border: 1.5px dashed rgba(107, 117, 97, 0.2);
     border-radius: 10px;
     padding: 0.7rem 0.95rem;
     min-width: 0;
@@ -474,7 +479,7 @@
     display: flex;
     align-items: flex-end;
     gap: 2px;
-    height: 52px;
+    height: 104px;
     overflow: hidden;
   }
 
@@ -504,9 +509,11 @@
 
   .wordmarks {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 0.6rem;
+    justify-content: center;
+    gap: 0.75rem;
   }
 
   .wordmark-brand {
@@ -537,14 +544,14 @@
     font-size: 0.8rem;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(251, 248, 240, 0.8);
+    color: rgba(251, 248, 240, 0.95);
   }
 
   footer .fine-print {
     margin-top: 1.75rem;
     font-size: 0.75rem;
     font-weight: 300;
-    color: rgba(251, 248, 240, 0.75);
+    color: rgba(251, 248, 240, 0.95);
   }
 
   /* ---------- SMALL PHONES (<=360px) ---------- */
@@ -582,8 +589,6 @@
     }
 
     .wordmarks {
-      flex-direction: row;
-      justify-content: center;
       gap: 1.1rem;
     }
 
@@ -605,7 +610,7 @@
     <div class="hero-inner">
       <p class="eyebrow">1 Ano Vaidosa Fitness</p>
       <h1>Conexão &amp; Energia</h1>
-      <p class="subtitle">Uma manhã de pilates, brunch e bem-estar ao ar livre para celebrar juntas esse primeiro ano.</p>
+      <p class="subtitle">Uma manhã de pilates, brunch e bem-estar ao ar livre, para celebrar juntas esse 1 ano da Vaidosa.</p>
       <span class="date-pill">25 Jul · Sábado · 9h</span>
     </div>
   </section>
@@ -646,8 +651,8 @@
 
               <div class="invest-box">
                 <p class="invest-text">
-                  O investimento é de <strong>R$ 35,00</strong> por pessoa e ajuda a
-                  cobrir toda a estrutura do nosso encontro — do tapete de pilates ao
+                  O investimento é de <strong>R$ 35,00</strong> por pessoa. Esse valor
+                  cobre toda a estrutura do nosso encontro, do tapete de pilates ao
                   brunch compartilhado. Vagas limitadas, então garanta a sua com carinho.
                 </p>
               </div>
@@ -676,11 +681,10 @@
         </div>
 
         <p class="pix-note">
-          Toque em <strong>Copiar código</strong>, abra o Pix no seu banco,
-          escolha a opção "Pix Copia e Cola" e cole o código. Depois envie o
-          comprovante pelo WhatsApp
+          Copie o código, cole no Pix do seu banco e manda o comprovante pelo
+          WhatsApp
           <a href="https://wa.me/5554984462806" target="_blank" rel="noopener">(54) 98446-2806</a>
-          para confirmar sua presença.
+          pra garantir sua vaga.
         </p>
       </div>
 
