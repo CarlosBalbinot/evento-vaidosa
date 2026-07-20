@@ -350,6 +350,68 @@
     margin: 0;
   }
 
+  /* ---------- SOLD OUT STATE ---------- */
+
+  /* Wraps the decorative barcode so the stamp below can be centered
+     over it via position:absolute — the barcode carries no real
+     information, so a stamp there never covers anything important
+     regardless of how many lines the sold-out message wraps to. */
+  .barcode-wrap {
+    position: relative;
+  }
+
+  /* Circular "rubber stamp" badge, shown only when VAGAS_ESGOTADAS is
+     true (see <script> at the bottom), centered over the decorative
+     barcode like a ticket being stamped/cancelled. display:none by
+     default — JS switches it to flex. */
+  .sold-out-stamp {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 3;
+    width: 108px;
+    height: 108px;
+    border-radius: 50%;
+    /* double ring, imitating a stamp's outline */
+    border: 3px solid var(--blush-dark);
+    outline: 1.5px solid var(--blush-dark);
+    outline-offset: 3px;
+    transform: translate(-50%, -50%) rotate(-14deg);
+    background: rgba(251, 248, 240, 0.72);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0.5rem;
+    pointer-events: none;
+  }
+
+  .sold-out-stamp span {
+    font-family: "Jost", sans-serif;
+    font-weight: 500;
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--blush-dark);
+    line-height: 1.4;
+  }
+
+  /* Replaces the form when sold out. display:none by default — JS
+     switches it to block. */
+  .sold-out-message {
+    display: none;
+    text-align: center;
+    padding: 0.5rem 0 1.75rem;
+  }
+
+  .sold-out-message p {
+    font-weight: 300;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
   /* Perforation line separating data section from payment/confirmation */
   .perforation {
     position: relative;
@@ -663,6 +725,10 @@
               <p class="field-error submit-error" id="error-submit"></p>
             </form>
           </div>
+
+          <div class="sold-out-message" id="sold-out-message">
+            <p>As vagas para esse encontro já foram todas preenchidas! Obrigada por toda energia — nos vemos dia 25/07. 💚</p>
+          </div>
         </div>
       </div>
 
@@ -698,7 +764,12 @@
         </p>
       </div>
 
-      <div class="barcode" aria-hidden="true" id="barcode"></div>
+      <div class="barcode-wrap">
+        <div class="barcode" aria-hidden="true" id="barcode"></div>
+        <div class="sold-out-stamp" id="sold-out-stamp" aria-hidden="true">
+          <span>Vagas<br>Esgotadas</span>
+        </div>
+      </div>
       <p class="ticket-code">CONEXÃO &amp; ENERGIA · 25.07.2026</p>
     </div>
   </section>
@@ -711,6 +782,36 @@
     </div>
     <p class="fine-print">Vagas limitadas · Ao ar livre · Conexão</p>
   </footer>
+
+  <script>
+    // ============================================================
+    // CONTROLE DE VAGAS DO EVENTO
+    // Mude para false para reabrir as inscrições em um próximo evento.
+    // Enquanto true: o formulário e a seção de pagamento ficam
+    // escondidos, e no lugar aparecem o selo "Vagas Esgotadas" sobre
+    // o ticket e uma mensagem de agradecimento no lugar do formulário.
+    // ============================================================
+    const VAGAS_ESGOTADAS = true;
+
+    // Aplica o estado de vagas esgotadas na página (selo, formulário e
+    // pagamento). Toda essa lógica só roda quando VAGAS_ESGOTADAS é true;
+    // com false, a página segue exatamente como estava (form + pagamento).
+    (function applyVagasEsgotadas() {
+      if (!VAGAS_ESGOTADAS) return;
+
+      var stamp = document.getElementById('sold-out-stamp');
+      var formWrap = document.getElementById('ticket-form-wrap');
+      var soldOutMessage = document.getElementById('sold-out-message');
+      var perforation = document.querySelector('.perforation');
+      var pixSection = document.querySelector('.pix-section');
+
+      if (stamp) stamp.style.display = 'flex';
+      if (formWrap) formWrap.style.display = 'none';
+      if (soldOutMessage) soldOutMessage.style.display = 'block';
+      if (perforation) perforation.style.display = 'none';
+      if (pixSection) pixSection.style.display = 'none';
+    })();
+  </script>
 
   <script>
     // Generates the decorative "barcode" strip with irregular bar widths.
@@ -748,6 +849,7 @@
     (function ticketForm() {
       var form = document.getElementById('ticket-form');
       if (!form) return;
+      if (VAGAS_ESGOTADAS) return;
 
       var nameInput = document.getElementById('field-name');
       var phoneInput = document.getElementById('field-phone');
